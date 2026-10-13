@@ -1,0 +1,174 @@
+[
+    {
+        "id": "tab_de6",
+        "type": "tab",
+        "label": "Đề số 6 - Gauge",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "inject_timer",
+        "type": "inject",
+        "z": "tab_de6",
+        "name": "Chu kỳ 10s",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 140,
+        "wires": [
+            [
+                "http_get_ts"
+            ]
+        ]
+    },
+    {
+        "id": "http_get_ts",
+        "type": "http request",
+        "z": "tab_de6",
+        "name": "Đọc ThingSpeak",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://api.thingspeak.com/channels/3530838/feeds/last.json?api_key=5N9793CQFI1K8SIT",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 360,
+        "y": 140,
+        "wires": [
+            [
+                "fn_temp",
+                "fn_hum"
+            ]
+        ]
+    },
+    {
+        "id": "fn_temp",
+        "type": "function",
+        "z": "tab_de6",
+        "name": "Tách Nhiệt Độ",
+        "func": "msg.payload = parseFloat(msg.payload.field1);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 100,
+        "wires": [
+            [
+                "gauge_temp"
+            ]
+        ]
+    },
+    {
+        "id": "fn_hum",
+        "type": "function",
+        "z": "tab_de6",
+        "name": "Tách Độ Ẩm",
+        "func": "msg.payload = parseFloat(msg.payload.field2);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 180,
+        "wires": [
+            [
+                "gauge_hum"
+            ]
+        ]
+    },
+    {
+        "id": "gauge_temp",
+        "type": "ui_gauge",
+        "z": "tab_de6",
+        "name": "Gauge Nhiệt Độ",
+        "group": "ui_group_de6",
+        "order": 1,
+        "width": 6,
+        "height": 5,
+        "gtype": "gage",
+        "title": "Nhiệt Độ Phòng",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "60",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "30",
+        "seg2": "40",
+        "diff": false,
+        "className": "",
+        "x": 790,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "gauge_hum",
+        "type": "ui_gauge",
+        "z": "tab_de6",
+        "name": "Gauge Độ Ẩm","group": "ui_group_de6",
+        "order": 2,
+        "width": 6,
+        "height": 5,
+        "gtype": "gage",
+        "title": "Độ Ẩm Phòng",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#00aaff",
+            "#0026ca"
+        ],
+        "seg1": "60",
+        "seg2": "85",
+        "diff": false,
+        "className": "",
+        "x": 780,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "ui_group_de6",
+        "type": "ui_group",
+        "name": "Giám Sát Trạm Đo",
+        "tab": "ui_tab_de6",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ui_tab_de6",
+        "type": "ui_tab",
+        "name": "Đề Kiểm Tra Số 6",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
